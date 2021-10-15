@@ -15,9 +15,6 @@ body {
 .container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    display: flex;
-    justify-content: center;
     align-items: flex-start;
     flex-direction: column;
 }
@@ -29,6 +26,7 @@ body {
     background-color: #dedede;
     padding: 30px;
     width: 70%;
+    height: 70vh;
 }
 
 .wrapper {
@@ -62,7 +60,7 @@ body {
 
 
 .products {
-    width: 700px;
+    width: 800px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -73,7 +71,7 @@ body {
 }
 
 .cart {
-    width: 350px;
+    width: 400px;
     height: 50vh;
     background-color: #fff;
     padding: 30px;;
@@ -82,11 +80,27 @@ body {
 .cart ul {
     list-style: none;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    padding-right: 10px;
+    padding-bottom: 10px;
 }
 
 .cart input {    
-    width: 25px;
+    min-width: 25px;
+    max-width: 25px;
+}
+
+.desc_prod_cart {
+    width: 75px;
+    font-size: .8em;
+    text-align: right;
+}
+
+
+.cart ul li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
