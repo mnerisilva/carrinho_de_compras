@@ -7,25 +7,34 @@ const itensEscolhidos = []
 
 const dados_produto_escolhido = []
 
+const productCart = []
+
 productsAll.forEach(function(produto){
     produto.addEventListener('click', productAdd);
 })
 let quantidade = 0;
+let _index = 0;
 
 function productAdd(event){
     event.preventDefault();
     let _this = this;
     let _idProduto = _this.dataset.id;
-    if (dados_produto_escolhido.includes(_idProduto)){
+    //if (dados_produto_escolhido.includes(_idProduto)){
+        console.log('ID DO PRODUTO: ' + _idProduto);
+        console.log('TIPO ID DO PRODUTO: ' + typeof _idProduto);
+        let teste = productSearch(_idProduto);
+        console.log('teste: ' + teste);
+        console.log('tipo teste: ' + typeof teste);
+    if (teste){
         console.log('PRODUTO JÁ EXISTE');
-        quantidade = parseInt(dados_produto_escolhido[1]);
+        /*quantidade = parseInt(dados_produto_escolhido[1]);
         console.log('quantidade: ' + quantidade);
 
         alert('produto já existe: ' + quantidade)
         cart.querySelector('ul[data-idProduto="'+_idProduto+'"] li input').value = quantidade;
         quantidade = 0;
 
-        return;
+        return;*/
     } else {
         console.log('CONTINUEI...');
     const ulPai = _this.parentNode.parentNode;
@@ -34,8 +43,8 @@ function productAdd(event){
     let produto = ulPai.querySelector('li:nth-child(2) span').textContent;
     let preco = ulPai.querySelector('li:nth-child(3) span').textContent;
     let condicoes = ulPai.querySelector('li:nth-child(4) span').textContent;
-    console.log('cliquei aqui: ' + _this.dataset.id);
-    console.log('cliquei aqui: ' + condicoes);
+    //console.log('cliquei aqui: ' + _this.dataset.id);
+    //console.log('cliquei aqui: ' + condicoes);
 
     itensEscolhidos.push(_idProduto);
     dados_produto_escolhido.push({
@@ -45,8 +54,18 @@ function productAdd(event){
         'preco' : preco,
         'condicoes' : condicoes
     })
-    console.log(itensEscolhidos);
-    console.log(dados_produto_escolhido);
+
+    productCart.push({
+        'idProduto' : _idProduto,
+        'quantidade' : quantidade,
+        'produto' : produto,
+        'preco' : preco,
+        'condicoes' : condicoes
+    })
+    //console.log(itensEscolhidos);
+    //console.log(dados_produto_escolhido);
+
+    console.log('productCart: ' + productCart.toString());
 
     let _htmlContent = cart.innerHTML;
 
@@ -67,3 +86,15 @@ function productAdd(event){
   
 }
 
+
+function productSearch(produtoId){
+    productCart.map((item, index) => {
+        console.log('ITEM.IDPRODUCT' + item.idProduto)
+        if(item.idProduto === produtoId){
+            console.log('produto já EXISTE')
+            _index = index;
+            return true;
+        }
+    });
+    return false;
+}
