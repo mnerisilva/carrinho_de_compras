@@ -3,9 +3,7 @@ const cart = document.querySelector('.cart')
 
 console.log(productsAll);
 
-const itensEscolhidos = [];
 
-const dados_produto_escolhido = [];
 
 const productCart = [];
 
@@ -17,7 +15,7 @@ productsAll.forEach(function(produto){
 let quantidade = 0;
 let _index = 0;
 
-let teste = false;
+let teste = [];
 
 function productAdd(event){
     event.preventDefault();
@@ -28,21 +26,25 @@ function productAdd(event){
         console.log('TIPO ID DO PRODUTO: ' + typeof _idProduto);
         console.log('teste: ' + teste);
         console.log('tipo teste: ' + typeof teste);
-        if(productCart.length > 0){
+        if(productCart.length > 0){ // JÁ TEM PRODUTO NO ARRAY/CARRINHO
             teste = productSearch(_idProduto);
-            console.log('JÁ EXISTE PRODUTO NO CARRINHO. SAINDO DA APLICAÇÃO. ' + teste);            
-            /*quantidade = parseInt(dados_produto_escolhido[1]);
-            console.log('quantidade: ' + quantidade);
-
-            alert('produto já existe: ' + quantidade)
-            cart.querySelector('ul [data-idProduto="'+_idProduto+'"] li input').value = quantidade;
-            quantidade = 0;*/
-            return;
+            console.log('JÁ EXISTE PRODUTO NO CARRINHO. SAINDO DA APLICAÇÃO. ' + teste);
+            if(teste[0]){
+                console.log('ESSE PRODUTO JÁ EXISTE!!!' + teste[1]);
+                const produtoRecorrente = document.getElementById('1');
+                let _valor = produtoRecorrente.querySelector('li input').value;
+                _valor++;
+                produtoRecorrente.querySelector('li input').value = _valor;
+                productCart[teste[1]].quantidade = _valor;
+                console.log(JSON.stringify(productCart));
+                teste = [];
+                return;
+            }
                     
-        } else {
-            console.log('CONTINUEI...');
+        }
+            console.log('PRODUTO NOVO NO CARRINHO');
             const ulPai = _this.parentNode.parentNode;
-            quantidade++;
+            quantidade = 1;
             const primeiraLi = ulPai.querySelector('li:first-child');
             let produto = ulPai.querySelector('li:nth-child(2) span').textContent;
             let preco = ulPai.querySelector('li:nth-child(3) span').textContent;
@@ -50,14 +52,7 @@ function productAdd(event){
             //console.log('cliquei aqui: ' + _this.dataset.id);
             //console.log('cliquei aqui: ' + condicoes);
 
-            itensEscolhidos.push(_idProduto);
-            dados_produto_escolhido.push({
-                'idProduto' : _idProduto,
-                'quantidade' : quantidade,
-                'produto' : produto,
-                'preco' : preco,
-                'condicoes' : condicoes
-            })
+
 
             productCart.push({
                 'idProduto' : _idProduto,
@@ -73,7 +68,7 @@ function productAdd(event){
 
             let _htmlContent = cart.innerHTML;
 
-            cart.innerHTML = _htmlContent + `<ul data-idProduto="${_idProduto}"">
+            cart.innerHTML = _htmlContent + `<ul data-idProduto="${_idProduto}" id='${_idProduto}'">
                 <li><img src="images/img-0${_idProduto}-p.jpg" alt="produto"></li>
                 <li><p class="desc_prod_cart">${produto}</p></li>
                 <li><input type="text" maxlength="3" width="3" value="${quantidade}" /></li></li>
@@ -81,7 +76,7 @@ function productAdd(event){
                 <li></li>
             </ul>`;    
 
-        }
+       
             
 
     
@@ -91,6 +86,7 @@ function productAdd(event){
 
 
 function productSearch(produtoId){
+    let arrStatus = [];
     productCart.map((item, index) => {
         console.log('ITEM.IDPRODUCT' + item.idProduto)
         if(item.idProduto === produtoId){
