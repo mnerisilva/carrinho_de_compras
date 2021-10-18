@@ -94,6 +94,10 @@ body {
     width: 90px !important;
 }
 
+.cart ul li:nth-last-child(4) p {
+    text-align: center;
+}
+
 .cart ul li:nth-last-child(5) {
     width: 90px !important;
 }
@@ -113,9 +117,10 @@ body {
 
 .cart {
     width: 600px;
-    height: 50vh;
+    height: 100%;
     background-color: #fff;
-    padding: 30px;;
+    padding: 30px;
+    overflow: auto;
 }
 
 .cart ul {
