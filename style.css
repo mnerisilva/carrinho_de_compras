@@ -67,8 +67,22 @@ body {
 }
 
 .products ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     list-style: none;
+    padding: 7px;
+    border: solid thin #9e9e9e17;
 }
+
+.prodDecricao {
+    word-break: normal;
+    width: 80px;
+    height: 15px;
+}
+
+
 
 .cart {
     width: 400px;

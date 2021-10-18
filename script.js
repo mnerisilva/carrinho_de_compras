@@ -7,7 +7,7 @@ console.log(productsAll);
 
 const productCart = [];
 
-const arrStatus = [];
+let arrStatus = [];
 
 productsAll.forEach(function(produto){
     produto.addEventListener('click', productAdd);
@@ -31,13 +31,18 @@ function productAdd(event){
             console.log('JÁ EXISTE PRODUTO NO CARRINHO. SAINDO DA APLICAÇÃO. ' + teste);
             if(teste[0]){
                 console.log('ESSE PRODUTO JÁ EXISTE!!!' + teste[1]);
-                const produtoRecorrente = document.getElementById('1');
-                let _valor = produtoRecorrente.querySelector('li input').value;
-                _valor++;
-                produtoRecorrente.querySelector('li input').value = _valor;
-                productCart[teste[1]].quantidade = _valor;
+                const produtoRecorrente = document.getElementById(_idProduto);
+                let inputProdutoRecorrente = produtoRecorrente.querySelector('li input');
+                let valorAtual = inputProdutoRecorrente.value;
+                inputProdutoRecorrente.value = parseInt(valorAtual) + 1;
+            
+                //let _valor = produtoRecorrente.querySelector('li input').value;
+                //_valor++;
+                //produtoRecorrente.querySelector('li input').value = _valor;
+                //productCart[teste[1]].quantidade = _valor;
+                productCart[teste[1]].quantidade = productCart[teste[1]].quantidade+1;
                 console.log(JSON.stringify(productCart));
-                teste = [];
+                arrStatus = [];
                 return;
             }
                     
@@ -46,9 +51,9 @@ function productAdd(event){
             const ulPai = _this.parentNode.parentNode;
             quantidade = 1;
             const primeiraLi = ulPai.querySelector('li:first-child');
-            let produto = ulPai.querySelector('li:nth-child(2) span').textContent;
-            let preco = ulPai.querySelector('li:nth-child(3) span').textContent;
-            let condicoes = ulPai.querySelector('li:nth-child(4) span').textContent;
+            let produto = ulPai.querySelector('li:nth-child(2) p').textContent;
+            let preco = ulPai.querySelector('li:nth-child(3) p').textContent;
+            let condicoes = ulPai.querySelector('li:nth-child(4) p').textContent;
             //console.log('cliquei aqui: ' + _this.dataset.id);
             //console.log('cliquei aqui: ' + condicoes);
 
@@ -66,17 +71,28 @@ function productAdd(event){
 
             console.log('productCart: ' + productCart.toString());
 
-            let _htmlContent = cart.innerHTML;
+            //let _htmlContent = cart.innerHTML;
+            let _htmlContent = '';
 
-            cart.innerHTML = _htmlContent + `<ul data-idProduto="${_idProduto}" id='${_idProduto}'">
+            /*cart.innerHTML = _htmlContent + `<ul data-idProduto="${_idProduto}" id='${_idProduto}'">
                 <li><img src="images/img-0${_idProduto}-p.jpg" alt="produto"></li>
                 <li><p class="desc_prod_cart">${produto}</p></li>
                 <li><input type="text" maxlength="3" width="3" value="${quantidade}" /></li></li>
                 <li><span>R$ </span><p class="desc_prod_cart">${preco}</p></li>
                 <li></li>
-            </ul>`;    
+            </ul>`;*/
 
        
+            productCart.map(elemento => {
+                _htmlContent = _htmlContent + `<ul data-idProduto="${elemento.idProduto}" id='${elemento.idProduto}'">
+                <li><img src="images/img-0${elemento.idProduto}-p.jpg" alt="produto"></li>
+                <li><p class="desc_prod_cart">${elemento.produto}</p></li>
+                <li><input type="text" maxlength="3" width="3" value="${elemento.quantidade}" /></li></li>
+                <li><span>R$ </span><p class="desc_prod_cart">${elemento.preco}</p></li>
+                <li></li>
+            </ul>`;
+                cart.innerHTML = _htmlContent;
+            });
             
 
     
@@ -94,10 +110,12 @@ function productSearch(produtoId){
             _index = index;
             teste = true;
             arrStatus[0] = teste;
-            arrStatus[1] = index;
+            arrStatus[1] = _index;
         }
     });
     
     return arrStatus;
     
 }
+
+
