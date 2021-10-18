@@ -1,5 +1,6 @@
 const productsAll = document.querySelectorAll('.products ul li:last-child a');
 const cart = document.querySelector('.cart')
+const totalDiv = document.querySelector('.total');
 
 console.log(productsAll);
 
@@ -17,11 +18,15 @@ let _index = 0;
 
 let teste = [];
 
+let totalItensCarrinho = 0;
+
+totalDiv.textContent = totalItensCarrinho;
+
+
 function productAdd(event){
     event.preventDefault();
     let _this = this;
     let _idProduto = _this.dataset.id;
-    //if (dados_produto_escolhido.includes(_idProduto)){
         console.log('ID DO PRODUTO: ' + _idProduto);
         console.log('TIPO ID DO PRODUTO: ' + typeof _idProduto);
         console.log('teste: ' + teste);
@@ -33,13 +38,12 @@ function productAdd(event){
                 console.log('ESSE PRODUTO JÁ EXISTE!!!' + teste[1]);
                 const produtoRecorrente = document.getElementById(_idProduto);
                 let inputProdutoRecorrente = produtoRecorrente.querySelector('li input');
-                let valorAtual = inputProdutoRecorrente.value;
-                inputProdutoRecorrente.value = parseInt(valorAtual) + 1;
-            
-                //let _valor = produtoRecorrente.querySelector('li input').value;
-                //_valor++;
-                //produtoRecorrente.querySelector('li input').value = _valor;
-                //productCart[teste[1]].quantidade = _valor;
+                let precoUnit = normalizaPreco(produtoRecorrente.querySelector('.precoUnit').textContent);
+                let subtotal = produtoRecorrente.querySelector('.subtotal');
+                let quantAtual = parseInt(inputProdutoRecorrente.value);
+                inputProdutoRecorrente.value = quantAtual + 1;
+                subtotal.innerHTML = precoUnit*inputProdutoRecorrente.value;
+                totalDiv.textContent = parseInt(totalDiv.textContent)+parseInt(subtotal.textContent);
                 productCart[teste[1]].quantidade = productCart[teste[1]].quantidade+1;
                 console.log(JSON.stringify(productCart));
                 arrStatus = [];
@@ -54,8 +58,6 @@ function productAdd(event){
             let produto = ulPai.querySelector('li:nth-child(2) p').textContent;
             let preco = ulPai.querySelector('li:nth-child(3) p').textContent;
             let condicoes = ulPai.querySelector('li:nth-child(4) p').textContent;
-            //console.log('cliquei aqui: ' + _this.dataset.id);
-            //console.log('cliquei aqui: ' + condicoes);
 
 
 
@@ -66,30 +68,21 @@ function productAdd(event){
                 'preco' : preco,
                 'condicoes' : condicoes
             })
-            //console.log(itensEscolhidos);
-            //console.log(dados_produto_escolhido);
+
 
             console.log('productCart: ' + productCart.toString());
 
-            //let _htmlContent = cart.innerHTML;
             let _htmlContent = '';
 
-            /*cart.innerHTML = _htmlContent + `<ul data-idProduto="${_idProduto}" id='${_idProduto}'">
-                <li><img src="images/img-0${_idProduto}-p.jpg" alt="produto"></li>
-                <li><p class="desc_prod_cart">${produto}</p></li>
-                <li><input type="text" maxlength="3" width="3" value="${quantidade}" /></li></li>
-                <li><span>R$ </span><p class="desc_prod_cart">${preco}</p></li>
-                <li></li>
-            </ul>`;*/
 
        
             productCart.map(elemento => {
                 _htmlContent = _htmlContent + `<ul data-idProduto="${elemento.idProduto}" id='${elemento.idProduto}'">
                 <li><img src="images/img-0${elemento.idProduto}-p.jpg" alt="produto"></li>
                 <li><p class="desc_prod_cart">${elemento.produto}</p></li>
-                <li><input type="text" maxlength="3" width="3" value="${elemento.quantidade}" /></li></li>
-                <li><span>R$ </span><p class="desc_prod_cart">${elemento.preco}</p></li>
-                <li></li>
+                <li><input type="text" maxlength="3" width="3" value="${elemento.quantidade}" disabled /></li></li>
+                <li><span>R$ </span><p class="desc_prod_cart precoUnit">${normalizaPreco(elemento.preco)}</p></li>
+                <li><span>R$ </span><p class="desc_prod_cart precoUnit subtotal">${normalizaPreco(elemento.preco)*parseInt(elemento.quantidade)}</p></li>
             </ul>`;
                 cart.innerHTML = _htmlContent;
             });
@@ -119,3 +112,12 @@ function productSearch(produtoId){
 }
 
 
+
+function normalizaPreco(_preco){
+    let preco_ = _preco.replaceAll('R$','');
+    console.log('SEM CIFRÃO: ' + preco_);
+    preco_ = preco_.trim();
+    preco_ = preco_.replaceAll(',','.');
+    precoNumber = parseInt(preco_);
+    return precoNumber;
+}
