@@ -82,7 +82,10 @@ body {
     height: 15px;
 }
 
-
+.cart ul li input {
+    text-align: right;
+    padding-right: 2px;
+}
 
 .cart {
     width: 400px;
